@@ -1,5 +1,6 @@
 package manufacturingPlant.models;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ public class Order {
 	private String customer;
 	
 	/**
-	 * The products and the current amount still need to complete this order
+	 * The products (types) and the current amount still need to complete this order
 	 * 
 	 * @clientCardinality 1
 	 * @clientNavigability NAVIGABLE
@@ -24,10 +25,19 @@ public class Order {
 	 */
 	private Map<Product, Integer> products = new HashMap<Product, Integer>();
 	
+	/**
+	 * The real products that are going to be delivered 
+	 */
+	private Map<Product, ArrayList<AssembledProduct>> assemblies = new HashMap<Product, ArrayList<AssembledProduct>>();
+	
 	public Order(Map<Product, Integer> products, String customer) {
 		this.initialProducts = products;
 		this.products = products;
 		this.customer = customer;
+		
+		for(Product product : products.keySet()) {
+			assemblies.put(product, new ArrayList<AssembledProduct>());
+		}
 	}
 	
 	/**
@@ -57,6 +67,10 @@ public class Order {
 		return products;
 	}
 	
+	/**
+	 * 
+	 * @ensure 
+	 */
 	public boolean isFinished() {
 		if(!finished) {
 			finished = true;
@@ -73,9 +87,12 @@ public class Order {
 	/**
 	 * Adds a product to this order to complete this order
 	 * 
-	 * @require product != null && initialProducts.containsKey(product) && !this.isFinished()
+	 * @require product != null && getInitialProducts().containsKey(product) && !this.isFinished() && getProducts().get(product) != 0
+	 * @ensure old.getProducts().get(product) = new.getProducts().get(product) + 1
 	 */
-	public void addProduct(Product product) {
+	public void addAssembledProduct(AssembledProduct assembly) {
+		Product product = assembly.getProduct();
 		products.put(product, new Integer(products.get(product) - 1));
+		assemblies.get(product).add(assembly);
 	}
 }

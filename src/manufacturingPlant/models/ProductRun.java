@@ -10,10 +10,10 @@ public class ProductRun {
 	 * @directed true
 	 * @supplierCardinality 1..*
 	 */
-	private Assembly product;
+	private Product product;
 	
 	/** Amount of products left to be made in this run */
-	int amount;
+	private int amount;
 	
 	/**
 	 * @require product != null
@@ -29,7 +29,7 @@ public class ProductRun {
 	 * 
 	 * @ensure result != null
 	 */
-	public Assembly getProduct() {
+	public Product getProduct() {
 		return product;
 	}
 

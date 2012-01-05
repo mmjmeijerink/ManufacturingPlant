@@ -11,7 +11,8 @@ public class ManufacturingPlantController implements Observer {
 
 	private Map<Product, Integer> products = new HashMap<Product, Integer>();
 
-	private Map<Product, Integer> queue = new HashMap<Product, Integer>();
+	//private Map<Product, Integer> queue = new HashMap<Product, Integer>();
+	private ArrayList<ProductRun> queue = new ArrayList<ProductRun>();
 
 	/**
 	 * @clientCardinality 1
@@ -36,11 +37,26 @@ public class ManufacturingPlantController implements Observer {
 	}
 
 	public void run() {
-		return;
+		for(int i = 0; i < assemblyLines.size() && !queue.isEmpty(); i++) {
+			if(assemblyLines.get(i).isIdle()) {
+				assemblyLines.get(i).startRun(queue.get(0));
+				queue.remove(queue.remove(0));
+			}
+		}
 	}
 
-	public void addProductRun(Product product, int amount) {
-		return;
+	public void addProductRun(ProductRun run) {
+		if(queue.contains(run)) {
+			for(int i = 0; i < queue.size(); i++) {
+				if(queue.get(i).equals(run)) {
+					queue.get(i).increaseWithAmount(run.getAmount());
+				}
+			}
+		} else {
+			queue.add(run);
+		}
+		
+		run();
 	}
 	
 	public void cancelOrder(Order order) {
@@ -60,7 +76,13 @@ public class ManufacturingPlantController implements Observer {
 	}
 
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
-
+		if(o instanceof AssemblyLine) {
+			for(int i = 0; i < assemblyLines.size() && !queue.isEmpty(); i++) {
+				if(assemblyLines.get(i).isIdle()) {
+					assemblyLines.get(i).startRun(queue.get(0));
+					queue.remove(queue.remove(0));
+				}
+			}
+		}
 	}
 }

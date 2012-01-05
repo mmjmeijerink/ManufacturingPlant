@@ -1,7 +1,14 @@
+package manufacturingPlant.models;
+
 public abstract class Assembly {
 
 	private String name;
 
-	private int serialNumber;
-
+	public Assembly(String name) {
+		this.name = name;
+	}
+	
+	public String getName() {
+		return name;
+	}
 }
