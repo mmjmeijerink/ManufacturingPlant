@@ -1,5 +1,15 @@
 package manufacturingPlant.models;
 
+
+/**
+ * De klasse ProductRun modelleert een Product Run van
+ * Use Case Industries. Bij de Constructor kan een Product opgegeven
+ * worden en een aantal. Dit is het aantal Producten dat er van 
+ * een Product gemaakt gaan worden in een specifieke ProductRun.
+ * 
+ * @author Herman Slatman & Mart Meijerink
+ *
+ */
 public class ProductRun {
 	
 	/**
@@ -16,6 +26,9 @@ public class ProductRun {
 	private int amount;
 	
 	/**
+	 * De Constructor van ProductRun vraagt om een Product en een
+	 * aantal. Deze geven het Product aan dat geproduceerd gaat worden
+	 * en hoeveel daarvan geproduceerd worden
 	 * @require product != null
 	 * @require amount > 0
 	 */
@@ -26,7 +39,6 @@ public class ProductRun {
 	
 	/**
 	 * The product to be made in this run
-	 * 
 	 * @ensure result != null
 	 */
 	public Product getProduct() {
@@ -35,7 +47,6 @@ public class ProductRun {
 
 	/**
 	 * The amount left to be made in this run
-	 * 
 	 * @ensure result == amount > 0 || this.isFinished()
 	 */
 	public int getAmount() {
@@ -44,7 +55,6 @@ public class ProductRun {
 
 	/**
 	 * The amount of products which this run has to make more than the initial amount
-	 * 
 	 * @param amount the amount to set
 	 * @require (getAmount() + amount) > 0
 	 * @ensure result == (old.getAmount() + amount) || 0

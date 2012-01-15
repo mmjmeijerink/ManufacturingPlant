@@ -4,6 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * De klasse Order stelt een order voor binnen het systeem
+ * Hieraan wordt een blauwdruk van Product toegevoegd tijdens het aanmaken
+ * van een instantie. Daarna kan er begonnen worden met maken van de
+ * AssembledProducts, om deze Order te voltooien.
+ * 
+ * @author Herman Slatman & Mart Meijerink
+ *
+ */
 public class Order {
 
 	/** The initial set of products and the amounts for this order */
@@ -30,6 +39,16 @@ public class Order {
 	 */
 	private Map<Product, ArrayList<AssembledProduct>> assemblies = new HashMap<Product, ArrayList<AssembledProduct>>();
 	
+	/**
+	 * De Constructor van Order vraag om een Map van <Product, Integer> paren.
+	 * Dit zijn de Producten die geleverd moeten worden met het bijbehorende aantal.
+	 * Deze worden geleverd aan de customer die ingegeven wordt.
+	 * @param products Map<Product, Integer> die de te leveren Producten voorstelt
+	 * @param customer de klant waarvoor deze Order gemaakt wordt
+	 * @require products != null && customer != ""
+	 * @ensure this.initialProducts == products && this.products == products
+	 * 		   this.customer == customer
+	 */
 	public Order(Map<Product, Integer> products, String customer) {
 		this.initialProducts = products;
 		this.products = products;
@@ -42,8 +61,7 @@ public class Order {
 	
 	/**
 	 * Returns the initial products with their initial amounts
-	 * 
-	 * @return the initialProducts
+	 * @return this.initialProducts
 	 */
 	public Map<Product, Integer> getInitialProducts() {
 		return initialProducts;
@@ -51,7 +69,6 @@ public class Order {
 	
 	/**
 	 * Customer of this order
-	 * 
 	 * @ensure result != null
 	 */
 	public String getCustomer() {
@@ -60,7 +77,6 @@ public class Order {
 
 	/**
 	 * Returns the products and the amounts still needed to complete this order
-	 * 
 	 * @return the products
 	 */
 	public Map<Product, Integer> getProducts() {
@@ -68,8 +84,8 @@ public class Order {
 	}
 	
 	/**
-	 * 
-	 * @ensure 
+	 * Geeft aan of deze Order klaar is voor levering
+	 * @ensure result == this.finished
 	 */
 	public boolean isFinished() {
 		if(!finished) {
@@ -85,10 +101,9 @@ public class Order {
 	}
 	
 	/**
-	 * Adds a product to this order to complete this order
-	 * 
-	 * @require product != null && getInitialProducts().containsKey(product) && !this.isFinished() && getProducts().get(product) != 0
-	 * @ensure old.getProducts().get(product) = new.getProducts().get(product) + 1
+	 * Adds an AssembledProduct to this order to complete this order
+	 * @require assembly != null && getInitialProducts().containsKey(assembly) && !this.isFinished() && getProducts().get(assembly) != 0
+	 * @ensure old.getProducts().get(assembly) = new.getProducts().get(assembly) + 1
 	 */
 	public void addAssembledProduct(AssembledProduct assembly) {
 		Product product = assembly.getProduct();
