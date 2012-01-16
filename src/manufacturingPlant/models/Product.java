@@ -55,6 +55,17 @@ public class Product extends Assembly {
 	}
 	
 	/**
+	 * Removes the given assembly from the assemblies
+	 * This means (probably) that this assembly is added to an order
+	 * 
+	 * @require assembly != null
+	 * @ensure !this.getAssemblies().contains(assembly)
+	 */
+	public void removeAssembly(AssembledProduct assembly) {
+		assemblies.remove(assembly);
+	}
+	
+	/**
 	 * Voegt een nieuw AssembledProduct toe van dit Product
 	 * @param assembly het AssembledProduct dat geproduceerd werd
 	 * @require assembly != null && assembly instanceof AssembledProduct

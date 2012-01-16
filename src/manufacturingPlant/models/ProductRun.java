@@ -22,8 +22,11 @@ public class ProductRun {
 	 */
 	private Product product;
 	
-	/** Amount of products left to be made in this run */
+	/** Amount of products which this run needs to make in total */
 	private int amount;
+	
+	/** Order for which this run is running */
+	private Order order;
 	
 	/**
 	 * De Constructor van ProductRun vraagt om een Product en een
@@ -32,9 +35,10 @@ public class ProductRun {
 	 * @require product != null
 	 * @require amount > 0
 	 */
-	public ProductRun(Product product, int amount) {
+	public ProductRun(Product product, int amount, Order order) {
 		this.product = product;
 		this.amount = amount;
+		this.order = order;
 	}
 	
 	/**
@@ -46,11 +50,20 @@ public class ProductRun {
 	}
 
 	/**
-	 * The amount left to be made in this run
-	 * @ensure result == amount > 0 || this.isFinished()
+	 * The amount which this run needs to make in total
+	 * @ensure result == amount >= 0
 	 */
 	public int getAmount() {
 		return amount;
+	}
+	
+	/**
+	 * The Order associated with this run
+	 * 
+	 * @ensure result != null
+	 */
+	public Order getOrder() {
+		return order;
 	}
 
 	/**
@@ -67,13 +80,5 @@ public class ProductRun {
 		}
 		
 		return this.amount;
-	}
-
-	/**
-	 * Whether or not this product run is finished
-	 * @ensure result = getAmount() == 0
-	 */
-	public boolean isFinished() {
-		return amount == 0;
 	}
 }

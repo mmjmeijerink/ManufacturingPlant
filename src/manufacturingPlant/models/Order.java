@@ -84,6 +84,15 @@ public class Order {
 	}
 	
 	/**
+	 * Returns the assemblies associated with this order
+	 * 
+	 * @ensure result != null
+	 */
+	public Map<Product, ArrayList<AssembledProduct>> getAssemblies() {
+		return assemblies;
+	}
+	
+	/**
 	 * Geeft aan of deze Order klaar is voor levering
 	 * @ensure result == this.finished
 	 */
@@ -107,6 +116,7 @@ public class Order {
 	 */
 	public void addAssembledProduct(AssembledProduct assembly) {
 		Product product = assembly.getProduct();
+		product.removeAssembly(assembly);
 		products.put(product, new Integer(products.get(product) - 1));
 		assemblies.get(product).add(assembly);
 	}

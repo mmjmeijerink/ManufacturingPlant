@@ -10,4 +10,4 @@ package manufacturingPlant.models;
  * @author Herman Slatman & Mart Meijerink
  *
  */
-public interface Part { }
+public interface Part {}
