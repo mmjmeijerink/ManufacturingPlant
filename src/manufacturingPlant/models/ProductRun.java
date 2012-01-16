@@ -74,6 +74,6 @@ public class ProductRun {
 	 * @ensure result = getAmount() == 0
 	 */
 	public boolean isFinished() {
-		return amount > 0;
+		return amount == 0;
 	}
 }

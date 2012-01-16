@@ -13,17 +13,16 @@ package manufacturingPlant.models;
  */
 public class Robot {
 
-	//De positie op de AssemblyLine
+	/** De positie op de AssemblyLine */
 	private final int stationNumber;
-	//Geeft aan of deze robot de eerste is op de lijn
+	/** Geeft aan of deze robot de eerste is op de lijn */
 	private boolean isFirstRobotOfTheLine = false;
-	//Geeft aan of deze robot de laatste op de lijn is
+	/** Geeft aan of deze robot de laatste op de lijn is */
 	private boolean isLastRobotOfTheLine = false;
 	
-	//Het product dat op dit moment wordt geassembleerd
-	//op de AssemblyLine waar deze Robot aan staat
+	/** Het product dat op dit moment wordt geassembleerd op de AssemblyLine waar deze Robot aan staat */
 	private AssembledProduct productUnderConstruction;
-	//De AssemblyLine waarop deze Robot staat
+	/** De AssemblyLine waarop deze Robot staat */
 	private AssemblyLine line;
 	
 	/**
@@ -44,6 +43,14 @@ public class Robot {
 	public Robot(AssemblyLine line, int stationNumber) {
 		this.line = line;
 		this.stationNumber = stationNumber;
+		
+		if(stationNumber == 1) {
+			isFirstRobotOfTheLine = true;
+		}
+		
+		if(stationNumber == line.getProductRun().getProduct().getPart().size()) {
+			isLastRobotOfTheLine = true;
+		}
 	}
 	
 	/**
@@ -62,7 +69,7 @@ public class Robot {
 				productUnderConstruction = new AssembledProduct(line.getProductRun().getProduct());
 			}
 		} else if(isLastRobotOfTheLine) {
-			int serialNumber = 0; //Er kunnen honderden manieren bedacht worden om aan een uniek serienummer te komen. Hier hebben we echter geen tijd voor.
+			int serialNumber = 0; //Er kunnen vele manieren bedacht worden om aan een uniek serienummer te komen. Hier hebben we echter geen tijd voor.
 			productUnderConstruction.setSerialNumber(serialNumber);
 			line.deliverFinishedProduct();
 		} else {

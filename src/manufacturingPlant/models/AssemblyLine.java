@@ -1,6 +1,7 @@
 package manufacturingPlant.models;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -41,8 +42,8 @@ public class AssemblyLine extends Observable {
 	
 	/**
 	 * Geeft de ProductRun waaraan gewerkt wordt op deze AssemblyLine
-	 * @return this.run
-	 * @ensure result == this.run
+	 * 
+	 * @ensure (result == null && this.isIdle()) || (result != null && !this.isIdle())
 	 */
 	public ProductRun getProductRun() {
 		return run;
@@ -80,8 +81,6 @@ public class AssemblyLine extends Observable {
 	 */
 	private void finishRun() {
 		isIdle = true;
-		//Toegevoegd door Herman op 15-01-2012:
-		//Aan het einde run op null zetten?
 		this.run = null;
 		notifyObservers();
 	}
@@ -93,7 +92,7 @@ public class AssemblyLine extends Observable {
 	 */
 	public void nextStep() {
 		for(int i = 0; i < robots.size(); i++) {
-			if(robots.get(i).getProductUnderConstruction() != null)
+			if(robots.get(i).getProductUnderConstruction() != null && !robots.get(i).isLastRobotOfTheLine())
 				robots.get(i).getProductUnderConstruction().moveStation();
 		}
 		
@@ -109,10 +108,23 @@ public class AssemblyLine extends Observable {
 	public void startRun(ProductRun run) {
 		isIdle = false;
 		amountMade = 0;
-		//Toegevoegd door Herman op 15-01-2012:
-		//de run moet wel gezet worden?
 		this.run = run;
-		return;
+		
+		//Maak de benodigde Robots en hun PartBins aan
+		Map<Part, Integer> parts = run.getProduct().getPart();
+		int stationNumber = 1;
+		
+		for(Part part : parts.keySet()) {
+			Robot robot = new Robot(this, stationNumber);
+			stationNumber++;
+			
+			ArrayList<Part> partsForBin = new ArrayList<Part>();
+			for(int i = 0; i < parts.get(part); i++) {
+				partsForBin.add(part);
+			}
+			
+			robot.setPartBin(new PartBin(partsForBin));
+		}
 	}
 
 	@Override

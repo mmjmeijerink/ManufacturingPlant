@@ -67,6 +67,7 @@ public class Product extends Assembly {
 	/**
 	 * Geeft de Parts die benodigd zijn voor dit Product
 	 * @return ArrayList<Part> met alle Parts (met goede aantal)
+	 * @ensure result != null
 	 */
 	public ArrayList<Part> getParts() {
 		ArrayList<Part> result = new ArrayList<Part>();
@@ -77,5 +78,14 @@ public class Product extends Assembly {
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * Geeft de mapping van parts die in dit Product zitten met als key het aantal per part
+	 * 
+	 * @ensure result != null
+	 */
+	public Map<Part, Integer> getPart() {
+		return parts;
 	}
 }
