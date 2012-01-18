@@ -9,6 +9,8 @@ import java.util.Observer;
 
 public class ManufacturingPlantController implements Observer {
 
+	/** ArrayList with all types of products the plant currently can produce */
+	private ArrayList<Product> productTypes = new ArrayList<Product>(); 
 	/** Map with <Product, ArrayList<AssembledProduct>> mappings modeling which products there are and how many there are in stock */
 	private Map<Product, ArrayList<AssembledProduct>> products = new HashMap<Product, ArrayList<AssembledProduct>>();
 	/** ArrayList with all ProductRuns that are waiting for an empty AssemblyLine */
