@@ -1,6 +1,7 @@
 package manufacturingPlant.controllers;
 
 import manufacturingPlant.models.*;
+import manufacturingPlant.views.MainView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +36,12 @@ public class ManufacturingPlantController implements Observer {
 	/** Map with <Part, ArrayList<Part>> mappings modeling which parts there are and how many there are in stock */
 	private Map<Part, ArrayList<Part>> parts = new HashMap<Part, ArrayList<Part>>();
 
+	private MainView view;
+	
+	public ManufacturingPlantController() {
+		view = new MainView();
+	}
+	
 	/**
 	 * Adds an Order and puts all products still in stock which can be used in the order
 	 * Then it makes new ProductRuns to match the number of product needed for this order
@@ -120,5 +127,10 @@ public class ManufacturingPlantController implements Observer {
 		if(o instanceof AssemblyLine) {
 			run();
 		}
+	}
+
+	//Voor het toevoegen van Producten tijdens het testen
+	public void setProducts(ArrayList<Product> products) {
+		this.productTypes = products;
 	}
 }
