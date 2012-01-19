@@ -2,13 +2,16 @@ package manufacturingPlant.controllers;
 
 import manufacturingPlant.models.*;
 import manufacturingPlant.views.MainView;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
-public class ManufacturingPlantController implements Observer {
+public class ManufacturingPlantController implements Observer, ActionListener {
 
 	/** ArrayList with all types of products the plant currently can produce */
 	private ArrayList<Product> productTypes = new ArrayList<Product>(); 
@@ -39,7 +42,8 @@ public class ManufacturingPlantController implements Observer {
 	private MainView view;
 	
 	public ManufacturingPlantController() {
-		view = new MainView();
+		view = new MainView(this);
+		view.log("Manufacturing plant started");
 	}
 	
 	/**
@@ -62,6 +66,8 @@ public class ManufacturingPlantController implements Observer {
 			
 			addProductRun(new ProductRun(product, order.getProducts().get(product), order));
 		}
+		
+		view.setOrdersList(orders);
 	}
 
 	/**
@@ -132,5 +138,18 @@ public class ManufacturingPlantController implements Observer {
 	//Voor het toevoegen van Producten tijdens het testen
 	public void setProducts(ArrayList<Product> products) {
 		this.productTypes = products;
+		view.setProducts(products);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		System.out.println("Button pushed");
+		if(arg0.getActionCommand().equals(view.getAddProductButton().getActionCommand())) {
+			view.setProductsOnNewOrder(view.getNewProductValue(), view.getNewAmountValue());
+			view.log("Added new product to the order.\nProduct: " + view.getNewProductValue() + "\nAmount: " + view.getNewAmountValue());
+			view.resetNewProduct();
+		} else if(arg0.getActionCommand().equals(view.getAddOrderButton().getActionCommand())) {
+			// Add new order
+		}
 	}
 }

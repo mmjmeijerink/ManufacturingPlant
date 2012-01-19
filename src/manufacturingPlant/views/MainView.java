@@ -1,11 +1,13 @@
 package manufacturingPlant.views;
 
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import manufacturingPlant.models.*;
@@ -16,8 +18,11 @@ import manufacturingPlant.models.*;
 @SuppressWarnings("serial")
 public class MainView extends JFrame {
 
-    public MainView() {
+	private ActionListener controller;
+	
+    public MainView(ActionListener controller) {
 		super("Use Case Industries ManufacturingPlant");
+		this.controller = controller;
 		initComponents();
 		this.add(mainPanel);
 		this.setBounds(200, 50, 750, 650);
@@ -83,6 +88,8 @@ public class MainView extends JFrame {
 
         addProductButton.setText("Add product"); // NOI18N
         addProductButton.setName("addProductButton"); // NOI18N
+        addProductButton.setActionCommand("newProduct");
+        addProductButton.addActionListener(controller);
 
         amountLabel.setText("Amount"); // NOI18N
         amountLabel.setName("amountLabel"); // NOI18N
@@ -104,6 +111,8 @@ public class MainView extends JFrame {
 
         addOrderButton.setText("Add Order"); // NOI18N
         addOrderButton.setName("addOrderButton"); // NOI18N
+        addOrderButton.setActionCommand("newOrder");
+        addOrderButton.addActionListener(controller);
 
         javax.swing.GroupLayout newOrderPanelLayout = new javax.swing.GroupLayout(newOrderPanel);
         newOrderPanel.setLayout(newOrderPanelLayout);
@@ -236,15 +245,41 @@ public class MainView extends JFrame {
 
     private ArrayList<Product> products = new ArrayList<Product>();
     private ArrayList<Order> orders = new ArrayList<Order>();
-    private Map<Product, Integer> orderedProducts = new HashMap<Product, Integer>();
-
+    private Map<Product, Integer> productsOnNewOrder = new HashMap<Product, Integer>();
+    
     //Own getters and setters
+    public JButton getAddOrderButton() {
+    	return addOrderButton;
+    }
+    
+    public JButton getAddProductButton() {
+    	return addProductButton;
+    }
+    
     public String getCustomer() {
         return customerTextField.getText();
     }
+    
+    public Product getNewProductValue() {
+    	return (Product) productList.getSelectedItem();
+    }
+    
+    public int getNewAmountValue() {
+    	return (Integer) amountSpinner.getValue();
+    }
 
-    public Map<Product, Integer> getProducts() {
-        return orderedProducts;
+    public Map<Product, Integer> getProductsOnNewOrder() {
+        return productsOnNewOrder;
+    }
+    
+    public void setProductsOnNewOrder(Product product, int amount) {
+    	if(productsOnNewOrder.containsKey(product)) {
+    		productsOnNewOrder.put(product, productsOnNewOrder.get(product) + amount);
+    	} else {
+    		productsOnNewOrder.put(product, amount);
+    	}
+    	
+    	updateProductsOnNewOrderList();
     }
 
     public void setProducts(ArrayList<Product> products) {
@@ -261,6 +296,19 @@ public class MainView extends JFrame {
     private void updateProductList() {
         productList.setModel(new javax.swing.DefaultComboBoxModel(products.toArray()));
     }
+    
+    private void updateProductsOnNewOrderList() {
+        ArrayList<Product> newProducts = new ArrayList<Product>();
+        ArrayList<Integer> newAmounts = new ArrayList<Integer>();
+        
+        for(Product newProduct : productsOnNewOrder.keySet()) {
+        	newProducts.add(newProduct);
+        	newAmounts.add(productsOnNewOrder.get(newProduct));
+        }
+    	
+        addedProductsList.setListData(newProducts.toArray());
+        addedAmountsList.setListData(newAmounts.toArray());
+    }
 
     private void updateOrdersList() {
         String[] customers = new String[orders.size()];
@@ -270,5 +318,14 @@ public class MainView extends JFrame {
         }
 
         ordersList.setModel(new javax.swing.DefaultComboBoxModel(customers));
+    }
+    
+    public void resetNewProduct() {
+    	productList.setSelectedIndex(0);
+    	amountSpinner.setValue(new Integer(0));
+    }
+    
+    public void log(String msg) {
+    	logArea.append(msg + "\n");
     }
 }
