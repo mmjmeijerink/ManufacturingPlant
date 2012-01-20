@@ -110,20 +110,22 @@ public class AssemblyLine extends Observable {
 		amountMade = 0;
 		this.run = run;
 		
-		//Maak de benodigde Robots en hun PartBins aan
-		Map<Part, Integer> parts = run.getProduct().getPart();
-		int stationNumber = 1;
-		
-		for(Part part : parts.keySet()) {
-			Robot robot = new Robot(this, stationNumber);
-			stationNumber++;
+		if(run != null){
+			//Maak de benodigde Robots en hun PartBins aan
+			Map<Part, Integer> parts = run.getProduct().getPart();
+			int stationNumber = 1;
 			
-			ArrayList<Part> partsForBin = new ArrayList<Part>();
-			for(int i = 0; i < parts.get(part); i++) {
-				partsForBin.add(part);
+			for(Part part : parts.keySet()) {
+				Robot robot = new Robot(this, stationNumber);
+				stationNumber++;
+				
+				ArrayList<Part> partsForBin = new ArrayList<Part>();
+				for(int i = 0; i < parts.get(part); i++) {
+					partsForBin.add(part);
+				}
+				
+				robot.setPartBin(new PartBin(partsForBin));
 			}
-			
-			robot.setPartBin(new PartBin(partsForBin));
 		}
 	}
 

@@ -47,9 +47,12 @@ public class Robot {
 		if(stationNumber == 1) {
 			isFirstRobotOfTheLine = true;
 		}
-		
-		if(stationNumber == line.getProductRun().getProduct().getPart().size()) {
-			isLastRobotOfTheLine = true;
+		if(line != null){
+			if(line.getProductRun() != null){
+				if(stationNumber == this.line.getProductRun().getProduct().getPart().size()) {
+					isLastRobotOfTheLine = true;
+				}
+			}
 		}
 	}
 	
@@ -69,7 +72,7 @@ public class Robot {
 				productUnderConstruction = new AssembledProduct(line.getProductRun().getProduct());
 			}
 		} else if(isLastRobotOfTheLine) {
-			int serialNumber = 0; //Er kunnen vele manieren bedacht worden om aan een uniek serienummer te komen. Hier hebben we echter geen tijd voor.
+			int serialNumber = makeSerialNumber(); //Er kunnen vele manieren bedacht worden om aan een uniek serienummer te komen. Hier hebben we echter geen tijd voor.
 			productUnderConstruction.setSerialNumber(serialNumber);
 			line.deliverFinishedProduct();
 		} else {
@@ -78,6 +81,15 @@ public class Robot {
 		}
 	}
 	
+	private int makeSerialNumber() {
+		String res = "1";
+		for(int i = 0; i < 15; i++){
+			int k = (int)(Math.random() * 10.0);
+			res += Integer.toString(k);
+		}
+		return Integer.parseInt(res);
+	}
+
 	/**
 	 * De methode setPartBin wijst een PartBin toe aan deze Robot
 	 * @param bin de PartBin waaruit deze Robot Parts mag halen
