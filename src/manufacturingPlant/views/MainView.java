@@ -59,6 +59,7 @@ public class MainView extends JFrame {
         ordersOverviewPanel = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         ordersList = new javax.swing.JList();
+        cancelOrderButton = new javax.swing.JButton();
 
         mainPanel.setName("mainPanel"); // NOI18N
 
@@ -174,20 +175,29 @@ public class MainView extends JFrame {
         ordersList.setName("ordersList"); // NOI18N
         jScrollPane4.setViewportView(ordersList);
 
+        cancelOrderButton.setText("Cancel Order"); // NOI18N
+        cancelOrderButton.setName("cancelOrderButton"); // NOI18N
+        cancelOrderButton.setActionCommand("cancelOrder");
+        cancelOrderButton.addActionListener(controller);
+
         javax.swing.GroupLayout ordersOverviewPanelLayout = new javax.swing.GroupLayout(ordersOverviewPanel);
         ordersOverviewPanel.setLayout(ordersOverviewPanelLayout);
         ordersOverviewPanelLayout.setHorizontalGroup(
             ordersOverviewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ordersOverviewPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
+                .addGroup(ordersOverviewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
+                    .addComponent(cancelOrderButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE))
                 .addContainerGap())
         );
         ordersOverviewPanelLayout.setVerticalGroup(
             ordersOverviewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(ordersOverviewPanelLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ordersOverviewPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 333, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cancelOrderButton)
                 .addContainerGap())
         );
 
@@ -242,6 +252,7 @@ public class MainView extends JFrame {
     private javax.swing.JPanel ordersOverviewPanel;
     private javax.swing.JComboBox productList;
     private javax.swing.JLabel productToAdd;
+    private javax.swing.JButton cancelOrderButton;
 
     private ArrayList<Product> products = new ArrayList<Product>();
     private ArrayList<Order> orders = new ArrayList<Order>();
@@ -256,8 +267,16 @@ public class MainView extends JFrame {
     	return addProductButton;
     }
     
+    public JButton getCancelOrderButton() {
+    	return cancelOrderButton;
+    }
+    
     public String getCustomer() {
         return customerTextField.getText();
+    }
+    
+    public Order getSelectedOrder() {
+    	return (Order) ordersList.getSelectedValue();
     }
     
     public Product getNewProductValue() {
@@ -280,6 +299,16 @@ public class MainView extends JFrame {
     	}
     	
     	updateProductsOnNewOrderList();
+    }
+    
+    public void setNewOrder(Order order) {
+    	orders.add(order);
+    	updateOrdersList();
+    }
+    
+    public void removeOrder(Order order) {
+    	orders.remove(order);
+    	updateOrdersList();
     }
 
     public void setProducts(ArrayList<Product> products) {
@@ -311,13 +340,7 @@ public class MainView extends JFrame {
     }
 
     private void updateOrdersList() {
-        String[] customers = new String[orders.size()];
-
-        for(int i = 0; i < orders.size(); i++) {
-            customers[i] = orders.get(i).getCustomer();
-        }
-
-        ordersList.setModel(new javax.swing.DefaultComboBoxModel(customers));
+    	ordersList.setListData(orders.toArray());
     }
     
     public void resetNewProduct() {
@@ -325,7 +348,15 @@ public class MainView extends JFrame {
     	amountSpinner.setValue(new Integer(0));
     }
     
+    public void resetNewOrder() {
+    	resetNewProduct();
+    	customerTextField.setText("");
+    	productsOnNewOrder.clear();
+    	updateProductsOnNewOrderList();
+    }
+    
     public void log(String msg) {
     	logArea.append(msg + "\n");
+    	logArea.setCaretPosition(logArea.getText().length());
     }
 }

@@ -143,13 +143,19 @@ public class ManufacturingPlantController implements Observer, ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		System.out.println("Button pushed");
 		if(arg0.getActionCommand().equals(view.getAddProductButton().getActionCommand())) {
 			view.setProductsOnNewOrder(view.getNewProductValue(), view.getNewAmountValue());
 			view.log("Added new product to the order.\nProduct: " + view.getNewProductValue() + "\nAmount: " + view.getNewAmountValue());
 			view.resetNewProduct();
 		} else if(arg0.getActionCommand().equals(view.getAddOrderButton().getActionCommand())) {
-			// Add new order
+			if(!view.getProductsOnNewOrder().isEmpty() && (!view.getCustomer().isEmpty() || !view.getCustomer().equals(" "))) {
+				view.setNewOrder(new Order(view.getProductsOnNewOrder(), view.getCustomer()));
+				view.log("Added new order.");
+				view.resetNewOrder();
+			}
+		} else if(arg0.getActionCommand().equals(view.getCancelOrderButton().getActionCommand())) {
+			view.log("Removed order of " + view.getSelectedOrder() + ".");
+			view.removeOrder(view.getSelectedOrder());
 		}
 	}
 }
