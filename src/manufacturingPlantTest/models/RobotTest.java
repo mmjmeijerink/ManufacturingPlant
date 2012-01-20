@@ -1,5 +1,6 @@
 package manufacturingPlantTest.models;
 
+import manufacturingPlant.models.PartBin;
 import manufacturingPlant.models.Robot;
 
 import org.junit.Before;
@@ -21,12 +22,14 @@ public class RobotTest extends junit.framework.TestCase{
 
 	@Test
 	public void testDoStep() {
-		fail("Not yet implemented");
+		fail("Still to be implemented");
 	}
 
 	@Test
 	public void testSetPartBin() {
-		fail("Not yet implemented");
+		PartBin bin = new PartBin(null);
+		r.setPartBin(bin);
+		assertEquals(r.getPartBin(),bin);
 	}
 
 	@Test

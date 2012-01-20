@@ -31,7 +31,9 @@ public class PartBin {
 	 */
 	public PartBin(ArrayList<Part> parts) {
 		//this.robot = robot;
-		this.parts.addAll(parts);
+		if(parts != null){
+			this.parts.addAll(parts);
+		}
 	}
 	
 	/**

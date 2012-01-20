@@ -22,6 +22,7 @@ public class AllTests extends TestSuite{
 	 */
 	public static Test suite() {
 		TestSuite suite = new TestSuite();
+		
 		suite.addTestSuite(AssembledProductTest.class);
 		suite.addTestSuite(AssemblyLineTest.class);	
 		suite.addTestSuite(AssemblyTest.class);
@@ -30,6 +31,7 @@ public class AllTests extends TestSuite{
 		suite.addTestSuite(ProductRunTest.class);
 		suite.addTestSuite(ProductTest.class);
 		suite.addTestSuite(RobotTest.class);
+		
 		return suite;
 	}
 	

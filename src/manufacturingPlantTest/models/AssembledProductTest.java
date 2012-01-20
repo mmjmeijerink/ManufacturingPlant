@@ -2,18 +2,25 @@ package manufacturingPlantTest.models;
 
 import static org.junit.Assert.*;
 
+import manufacturingPlant.models.AssembledProduct;
+import manufacturingPlant.models.Product;
+
 import org.junit.Before;
 import org.junit.Test;
 
 public class AssembledProductTest extends junit.framework.TestCase{
 
+	private AssembledProduct ap;
+	
 	@Before
 	public void setUp() throws Exception {
 	}
 
 	@Test
 	public void testAssembledProduct() {
-		fail("Not yet implemented");
+		ap = new AssembledProduct(new Product("test", null));
+		assertNotNull(ap);
+		assertEquals(ap.getSerialNumber(), -1);
 	}
 
 	@Test

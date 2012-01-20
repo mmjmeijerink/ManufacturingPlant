@@ -1,17 +1,23 @@
 package manufacturingPlantTest.models;
 
+import manufacturingPlant.models.Product;
+
 import org.junit.Before;
 import org.junit.Test;
 
 public class ProductTest extends junit.framework.TestCase{
 
+	Product p;
+	
 	@Before
 	public void setUp() throws Exception {
+		
 	}
 
 	@Test
 	public void testProduct() {
-		fail("Not yet implemented");
+		p = new Product("test", null);
+		assertNotNull(p);
 	}
 
 	@Test
