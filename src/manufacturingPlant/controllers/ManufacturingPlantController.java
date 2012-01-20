@@ -83,11 +83,14 @@ public class ManufacturingPlantController implements Observer, ActionListener {
 	 * If there is an idle AssemblyLine and the queue with ProductRuns isn't empty, an new run will be started
 	 */
 	public void run() {
-		view.log("<Looking for a free assembly line>");
 		for(int i = 0; i < assemblyLines.size() && !queue.isEmpty(); i++) {
 			if(assemblyLines.get(i).isIdle()) {
-				assemblyLines.get(i).startRun(queue.get(0));
+				// Log in de GUI
+				view.log("\n---------------------------------------------------------------");
 				view.log("\nStarted new run on assembly line " + i + ".\nProduct: " + queue.get(0).getProduct() + "\nAmount: " + queue.get(0).getAmount());
+				view.log("---------------------------------------------------------------");
+				
+				assemblyLines.get(i).startRun(queue.get(0));
 				queue.remove(queue.remove(0));
 			}
 		}
@@ -97,11 +100,12 @@ public class ManufacturingPlantController implements Observer, ActionListener {
 	 * Adds the ProductRun <code>run</code> to the queue
 	 */
 	public void addProductRun(ProductRun run) {
-		queue.add(run);
-		
 		// Log dit in de GUI
-		view.log("\nAdded new product run to the queue.\nProduct: " + run.getProduct() + "\nAmount: " + run.getAmount());
+		view.log("\n---------------------------------------------------------------");
+		view.log("Added new product run to the queue.\nProduct: " + run.getProduct() + "\nAmount: " + run.getAmount());
+		view.log("---------------------------------------------------------------");
 		
+		queue.add(run);
 		run();
 	}
 	
@@ -127,7 +131,7 @@ public class ManufacturingPlantController implements Observer, ActionListener {
 		
 		//Let all ProductRuns, associated with the order to cancel, currently being processed stop immediately 
 		for(AssemblyLine line : assemblyLines) {
-			if(line.getProductRun().getOrder().equals(order)) { 
+			if(line.getProductRun() != null && line.getProductRun().getOrder().equals(order)) {
 				cancelProductRun(line);
 			}
 		}
@@ -147,6 +151,10 @@ public class ManufacturingPlantController implements Observer, ActionListener {
 
 	public void update(Observable o, Object arg) {
 		if(o instanceof AssemblyLine) {
+			// Log in de GUI
+			view.log("\n---------------------------------------------------------------");
+			view.log("Product run for Order: " + ((ProductRun) arg).getOrder().toString() + " finished.\nProduct: " + ((ProductRun) arg).getProduct() + "\nAmount: " + ((ProductRun) arg).getAmount());
+			view.log("---------------------------------------------------------------");
 			run();
 		}
 	}
@@ -162,16 +170,27 @@ public class ManufacturingPlantController implements Observer, ActionListener {
 	public void actionPerformed(ActionEvent arg0) {
 		if(arg0.getActionCommand().equals(view.getAddProductButton().getActionCommand())) {
 			view.setProductsOnNewOrder(view.getNewProductValue(), view.getNewAmountValue());
-			view.log("\nAdded new product to the order.\nProduct: " + view.getNewProductValue() + "\nAmount: " + view.getNewAmountValue());
+			// Log in de GUI
+			view.log("\n---------------------------------------------------------------");
+			view.log("Added new product to the order.\nProduct: " + view.getNewProductValue() + "\nAmount: " + view.getNewAmountValue());
+			view.log("---------------------------------------------------------------");
+			
 			view.resetNewProduct();
 		} else if(arg0.getActionCommand().equals(view.getAddOrderButton().getActionCommand())) {
 			if(!view.getProductsOnNewOrder().isEmpty() && (!view.getCustomer().isEmpty() || !view.getCustomer().equals(" "))) {
+				// Log in de GUI
+				view.log("\n---------------------------------------------------------------");
+				view.log("Added new order.");
+				view.log("---------------------------------------------------------------");
+				
 				addOrder(view.getProductsOnNewOrder(), view.getCustomer());
-				view.log("\nAdded new order.");
 				view.resetNewOrder();
 			}
 		} else if(arg0.getActionCommand().equals(view.getCancelOrderButton().getActionCommand())) {
-			view.log("\nRemoved order of " + view.getSelectedOrder() + ".");
+			// Log in de GUI
+			view.log("\n---------------------------------------------------------------");
+			view.log("Removed order of " + view.getSelectedOrder() + ".");
+			view.log("---------------------------------------------------------------");
 			cancelOrder(view.getSelectedOrder());
 		}
 	}

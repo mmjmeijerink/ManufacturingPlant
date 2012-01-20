@@ -51,7 +51,7 @@ public class AssemblyLine extends Observable {
 	
 	/**
 	 * Geeft het aantal geproduceerde AssembledProducts terug
-	 * @return this.amountMade
+	 * @ensure result >= 0
 	 */
 	public int getAmountMade() {
 		return amountMade;
@@ -60,7 +60,7 @@ public class AssemblyLine extends Observable {
 	/**
 	 * Verhoogt het aantal geproduceerde AssemblyProducts, omdat
 	 * er een AssemblyProduct afgerond is
-	 * @ensure new.amountMade == old.amountMade + 1
+	 * @ensure new.getAmountMade() == old.getAmountMade() + 1
 	 */
 	public void deliverFinishedProduct() {
 		amountMade++;
@@ -69,7 +69,7 @@ public class AssemblyLine extends Observable {
 	/**
 	 * Geeft aan of deze AssemblyLine op dit moment bezig is met
 	 * een ProductRun
-	 * @return this.isIdle = this.run == null
+	 * @return this.isIdle() == this.getProductRun() == null
 	 */
 	public boolean isIdle() {
 		return isIdle;
@@ -77,12 +77,12 @@ public class AssemblyLine extends Observable {
 	
 	/**
 	 * Rond de ProductRun op deze AssemblyLine af
-	 * @ensure this.isIdle == true
+	 * @ensure this.isIdle() == true
 	 */
 	private void finishRun() {
 		isIdle = true;
+		notifyObservers(run);
 		this.run = null;
-		notifyObservers();
 	}
 	
 	/**
