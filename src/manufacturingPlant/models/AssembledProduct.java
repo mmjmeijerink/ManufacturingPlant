@@ -64,6 +64,15 @@ public class AssembledProduct {
 	}
 	
 	/**
+	 * Returns the station number where this AssembledProduct is currently on the assembly line or -1 if it is finished
+	 * 
+	 * @ensure result = -1 && this.isAssembled() || result >= 0 && !this.isAssembled()
+	 */
+	public int getStationNumber() {
+		return stationNumber;
+	}
+	
+	/**
 	 * Moves this product 1 station further on the AssemblyLine
 	 * 
 	 * @ensure result >= 0 || this.isAssembled() && result == -1 

@@ -100,7 +100,7 @@ public class Order {
 	public boolean isFinished() {
 		if(!finished) {
 			finished = true;
-			if(products != null){
+			if(products != null) {
 				for(Product product : products.keySet()) {
 					if(!products.get(product).equals(new Integer(0)))
 						finished = false;

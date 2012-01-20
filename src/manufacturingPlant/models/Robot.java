@@ -20,8 +20,6 @@ public class Robot {
 	/** Geeft aan of deze robot de laatste op de lijn is */
 	private boolean isLastRobotOfTheLine = false;
 	
-	/** Het product dat op dit moment wordt geassembleerd op de AssemblyLine waar deze Robot aan staat */
-	private AssembledProduct productUnderConstruction;
 	/** De AssemblyLine waarop deze Robot staat */
 	private AssemblyLine line;
 	
@@ -47,13 +45,25 @@ public class Robot {
 		if(stationNumber == 1) {
 			isFirstRobotOfTheLine = true;
 		}
-		if(line != null){
-			if(line.getProductRun() != null){
+		if(line != null) {
+			if(line.getProductRun() != null) {
 				if(stationNumber == this.line.getProductRun().getProduct().getPart().size()) {
 					isLastRobotOfTheLine = true;
 				}
 			}
 		}
+	}
+	
+	private AssembledProduct getCurrentProductUnderConstruction() {
+		AssembledProduct result = null;
+		
+		for(AssembledProduct product : line.getProductsUnderConstruction()) {
+			if(product.getStationNumber() == stationNumber) {
+				result = product;
+			}
+		}
+		
+		return result;
 	}
 	
 	/**
@@ -69,15 +79,16 @@ public class Robot {
 	public void doStep() {
 		if(isFirstRobotOfTheLine) {
 			if(line.getProductRun().getAmount() < line.getAmountMade()) {
-				productUnderConstruction = new AssembledProduct(line.getProductRun().getProduct());
+				line.addNewProductUnderConstruction(new AssembledProduct(line.getProductRun().getProduct()));
 			}
 		} else if(isLastRobotOfTheLine) {
-			int serialNumber = makeSerialNumber(); //Er kunnen vele manieren bedacht worden om aan een uniek serienummer te komen. Hier hebben we echter geen tijd voor.
-			productUnderConstruction.setSerialNumber(serialNumber);
+			int serialNumber = makeSerialNumber();
+			getCurrentProductUnderConstruction().setSerialNumber(serialNumber);
+			line.getProductRun().getOrder().addAssembledProduct(getCurrentProductUnderConstruction());
 			line.deliverFinishedProduct();
 		} else {
 			//monteer
-			productUnderConstruction.assembleParts(bin.getParts());
+			getCurrentProductUnderConstruction().assembleParts(bin.getParts());
 		}
 	}
 	
@@ -90,6 +101,11 @@ public class Robot {
 		return Integer.parseInt(res);
 	}
 
+	//De JUnit 'RobotTest' heeft deze methode nodig
+	public PartBin getPartBin() {
+		return bin;
+	}
+	
 	/**
 	 * De methode setPartBin wijst een PartBin toe aan deze Robot
 	 * @param bin de PartBin waaruit deze Robot Parts mag halen
@@ -107,7 +123,7 @@ public class Robot {
 	 * @return this.productUnderConstruction
 	 */
 	public AssembledProduct getProductUnderConstruction() {
-		return productUnderConstruction;
+		return getCurrentProductUnderConstruction();
 	}
 	
 	/**

@@ -40,6 +40,26 @@ public class AssemblyLine extends Observable {
 	 */
 	private ProductRun run = null;
 	
+	private ArrayList<AssembledProduct> productsUnderConstruction = new ArrayList<AssembledProduct>();
+	
+	/**
+	 * Geeft de AssembledProducts waaraan gewerkt worden op deze AssemblyLine
+	 * 
+	 * @ensure result != null
+	 */
+	public ArrayList<AssembledProduct> getProductsUnderConstruction() {
+		return productsUnderConstruction;
+	}
+	
+	/**
+	 * Voegt een nieuw AssembledProduct toe waaraan deze assembly line net is begonnen
+	 * 
+	 * @ensure getProductsUnderConstruction.contains(newProductUnderConstruction)
+	 */
+	public void addNewProductUnderConstruction(AssembledProduct newProductUnderConstruction) {
+		productsUnderConstruction.add(newProductUnderConstruction);
+	}
+	
 	/**
 	 * Geeft de ProductRun waaraan gewerkt wordt op deze AssemblyLine
 	 * 
@@ -69,7 +89,7 @@ public class AssemblyLine extends Observable {
 	/**
 	 * Geeft aan of deze AssemblyLine op dit moment bezig is met
 	 * een ProductRun
-	 * @return this.isIdle() == this.getProductRun() == null
+	 * @return result = this.getProductRun() == null
 	 */
 	public boolean isIdle() {
 		return isIdle;
@@ -77,10 +97,11 @@ public class AssemblyLine extends Observable {
 	
 	/**
 	 * Rond de ProductRun op deze AssemblyLine af
-	 * @ensure this.isIdle() == true
+	 * @ensure result = (this.isIdle() == true && this.getProductRun() == null)
 	 */
 	private void finishRun() {
 		isIdle = true;
+		productsUnderConstruction.clear();
 		notifyObservers(run);
 		this.run = null;
 	}
@@ -110,7 +131,7 @@ public class AssemblyLine extends Observable {
 		amountMade = 0;
 		this.run = run;
 		
-		if(run != null){
+		if(run != null) {
 			//Maak de benodigde Robots en hun PartBins aan
 			Map<Part, Integer> parts = run.getProduct().getPart();
 			int stationNumber = 1;

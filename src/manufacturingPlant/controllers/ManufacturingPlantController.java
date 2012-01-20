@@ -136,8 +136,10 @@ public class ManufacturingPlantController implements Observer, ActionListener {
 			}
 		}
 		
-		//Place all products which were already added to the order in stock
+		//Place all assemblies which were already added to the order in stock
 		for(Product product : order.getProducts().keySet()) {
+			product.newAssembledProduct(order.getAssemblies().get(product));
+			
 			if(products.containsKey(product)) {
 				products.get(product).addAll(order.getAssemblies().get(product));
 			} else {

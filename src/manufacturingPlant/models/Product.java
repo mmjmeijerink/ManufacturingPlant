@@ -22,7 +22,7 @@ public class Product extends Assembly {
 	 * @link composition
 	 * @supplierCardinality *
 	 */
-	private ArrayList<AssembledProduct> assemblies;
+	private ArrayList<AssembledProduct> assemblies = new ArrayList<AssembledProduct>();
 	
 	/**
 	 * Een Map waarin <Part, Integer> paren opgeslagen worden.
@@ -43,7 +43,7 @@ public class Product extends Assembly {
 	 */
 	public Product(String name, Map<Part, Integer> parts) {
 		super(name);
-		if(parts != null){
+		if(parts != null) {
 			this.parts.putAll(parts);
 		}
 	}
@@ -75,6 +75,16 @@ public class Product extends Assembly {
 	 */
 	public void newAssembledProduct(AssembledProduct assembly) {
 			assemblies.add(assembly);
+	}
+	
+	/**
+	 * Voegt alle AssembledProduct toe in de gegeven ArrayList
+	 * @param assembly het AssembledProduct dat geproduceerd werd
+	 * @require assembly != null && assembly instanceof AssembledProduct
+	 * @ensure this.getAssemblies().contains(assembly)
+	 */
+	public void newAssembledProduct(ArrayList<AssembledProduct> assemblies) {
+			assemblies.addAll(assemblies);
 	}
 	
 	/**
