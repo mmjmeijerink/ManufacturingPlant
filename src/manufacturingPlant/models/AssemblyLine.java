@@ -102,6 +102,7 @@ public class AssemblyLine extends Observable {
 	private void finishRun() {
 		isIdle = true;
 		productsUnderConstruction.clear();
+		robots.clear();
 		notifyObservers(run);
 		this.run = null;
 	}
@@ -115,10 +116,6 @@ public class AssemblyLine extends Observable {
 		for(int i = 0; i < robots.size(); i++) {
 			if(robots.get(i).getProductUnderConstruction() != null && !robots.get(i).isLastRobotOfTheLine())
 				robots.get(i).getProductUnderConstruction().moveStation();
-		}
-		
-		if(amountMade == run.getAmount()) {
-			finishRun();
 		}
 	}
 
@@ -138,6 +135,7 @@ public class AssemblyLine extends Observable {
 			
 			for(Part part : parts.keySet()) {
 				Robot robot = new Robot(this, stationNumber);
+				robots.add(robot);
 				stationNumber++;
 				
 				ArrayList<Part> partsForBin = new ArrayList<Part>();
@@ -148,6 +146,11 @@ public class AssemblyLine extends Observable {
 				robot.setPartBin(new PartBin(partsForBin));
 			}
 		}
+		
+		while(amountMade != run.getAmount()) {
+			nextStep();
+		}
+		finishRun();
 	}
 
 	@Override
