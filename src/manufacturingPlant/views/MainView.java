@@ -300,16 +300,6 @@ public class MainView extends JFrame {
     	
     	updateProductsOnNewOrderList();
     }
-    
-    public void setNewOrder(Order order) {
-    	orders.add(order);
-    	updateOrdersList();
-    }
-    
-    public void removeOrder(Order order) {
-    	orders.remove(order);
-    	updateOrdersList();
-    }
 
     public void setProducts(ArrayList<Product> products) {
         this.products = products;
@@ -319,6 +309,11 @@ public class MainView extends JFrame {
     public void setOrdersList(ArrayList<Order> orders) {
         this.orders = orders;
         updateOrdersList();
+    }
+    
+    public void removeOrder(Order order) {
+    	orders.remove(order);
+    	updateOrdersList();
     }
 
     //Own methodes

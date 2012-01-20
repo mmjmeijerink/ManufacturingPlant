@@ -39,11 +39,20 @@ public class ManufacturingPlantController implements Observer, ActionListener {
 	/** Map with <Part, ArrayList<Part>> mappings modeling which parts there are and how many there are in stock */
 	private Map<Part, ArrayList<Part>> parts = new HashMap<Part, ArrayList<Part>>();
 
+	/** The GUI */
 	private MainView view;
 	
+	/**
+	 * Constructor
+	 * Starts the factory and makes ten AssemblyLines
+	 */
 	public ManufacturingPlantController() {
 		view = new MainView(this);
-		view.log("Manufacturing plant started");
+		view.log("Manufacturing plant started\n");
+		
+		for(int i = 0; i < 10; i++) {
+			assemblyLines.add(new AssemblyLine());
+		}
 	}
 	
 	/**
@@ -55,11 +64,11 @@ public class ManufacturingPlantController implements Observer, ActionListener {
 		orders.add(order);
 		
 		for(Product product : order.getInitialProducts().keySet()) {
-			if(products.containsKey(product)) {
+			if(this.products.containsKey(product)) {
 				for(AssembledProduct assembly : product.getAssemblies()) {
-					if(order.getProducts().get(product) != 0 && products.get(product) > 0) {
+					if(order.getProducts().get(product) != 0 && !this.products.get(product).isEmpty()) {
 						order.addAssembledProduct(assembly);
-						products.put(product, products.get(product) - 1);
+						this.products.get(product).remove(assembly);
 					}
 				}
 			}
@@ -74,9 +83,11 @@ public class ManufacturingPlantController implements Observer, ActionListener {
 	 * If there is an idle AssemblyLine and the queue with ProductRuns isn't empty, an new run will be started
 	 */
 	public void run() {
+		view.log("<Looking for a free assembly line>");
 		for(int i = 0; i < assemblyLines.size() && !queue.isEmpty(); i++) {
 			if(assemblyLines.get(i).isIdle()) {
 				assemblyLines.get(i).startRun(queue.get(0));
+				view.log("\nStarted new run on assembly line " + i + ".\nProduct: " + queue.get(0).getProduct() + "\nAmount: " + queue.get(0).getAmount());
 				queue.remove(queue.remove(0));
 			}
 		}
@@ -87,6 +98,10 @@ public class ManufacturingPlantController implements Observer, ActionListener {
 	 */
 	public void addProductRun(ProductRun run) {
 		queue.add(run);
+		
+		// Log dit in de GUI
+		view.log("\nAdded new product run to the queue.\nProduct: " + run.getProduct() + "\nAmount: " + run.getAmount());
+		
 		run();
 	}
 	
@@ -127,6 +142,7 @@ public class ManufacturingPlantController implements Observer, ActionListener {
 		}
 		
 		orders.remove(order);
+		view.removeOrder(order);
 	}
 
 	public void update(Observable o, Object arg) {
@@ -142,20 +158,21 @@ public class ManufacturingPlantController implements Observer, ActionListener {
 	}
 
 	@Override
+	// Handelt de acties van de GUI af
 	public void actionPerformed(ActionEvent arg0) {
 		if(arg0.getActionCommand().equals(view.getAddProductButton().getActionCommand())) {
 			view.setProductsOnNewOrder(view.getNewProductValue(), view.getNewAmountValue());
-			view.log("Added new product to the order.\nProduct: " + view.getNewProductValue() + "\nAmount: " + view.getNewAmountValue());
+			view.log("\nAdded new product to the order.\nProduct: " + view.getNewProductValue() + "\nAmount: " + view.getNewAmountValue());
 			view.resetNewProduct();
 		} else if(arg0.getActionCommand().equals(view.getAddOrderButton().getActionCommand())) {
 			if(!view.getProductsOnNewOrder().isEmpty() && (!view.getCustomer().isEmpty() || !view.getCustomer().equals(" "))) {
-				view.setNewOrder(new Order(view.getProductsOnNewOrder(), view.getCustomer()));
-				view.log("Added new order.");
+				addOrder(view.getProductsOnNewOrder(), view.getCustomer());
+				view.log("\nAdded new order.");
 				view.resetNewOrder();
 			}
 		} else if(arg0.getActionCommand().equals(view.getCancelOrderButton().getActionCommand())) {
-			view.log("Removed order of " + view.getSelectedOrder() + ".");
-			view.removeOrder(view.getSelectedOrder());
+			view.log("\nRemoved order of " + view.getSelectedOrder() + ".");
+			cancelOrder(view.getSelectedOrder());
 		}
 	}
 }
