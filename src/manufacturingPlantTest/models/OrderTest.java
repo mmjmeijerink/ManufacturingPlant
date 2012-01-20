@@ -1,44 +1,54 @@
 package manufacturingPlantTest.models;
 
-import static org.junit.Assert.*;
+import manufacturingPlant.models.AssembledProduct;
+import manufacturingPlant.models.Order;
+import manufacturingPlant.models.Product;
 
 import org.junit.Before;
 import org.junit.Test;
 
 public class OrderTest extends junit.framework.TestCase{
 
+	private Order o;
+	
 	@Before
 	public void setUp() throws Exception {
+		o = new Order(null, "Klantnaam");
 	}
 
 	@Test
+	public void testOrder() {
+		assertNotNull(o);
+	}
+	
+	@Test
 	public void testGetInitialProducts() {
-		fail("Not yet implemented");
+		assertNull(o.getInitialProducts());
 	}
 
 	@Test
 	public void testGetCustomer() {
-		fail("Not yet implemented");
+		assertEquals(o.getCustomer(),"Klantnaam");
 	}
 
 	@Test
 	public void testGetProducts() {
-		fail("Not yet implemented");
+		assertNull(o.getProducts());
 	}
 
 	@Test
 	public void testGetAssemblies() {
-		fail("Not yet implemented");
+		assertTrue(o.getAssemblies().isEmpty());
 	}
 
 	@Test
 	public void testIsFinished() {
-		fail("Not yet implemented");
+		assertTrue(o.isFinished());
 	}
 
 	@Test
 	public void testAddAssembledProduct() {
-		fail("Not yet implemented");
+		o.addAssembledProduct(new AssembledProduct(new Product("test", null)));
 	}
 
 }

@@ -43,7 +43,9 @@ public class Product extends Assembly {
 	 */
 	public Product(String name, Map<Part, Integer> parts) {
 		super(name);
-		this.parts.putAll(parts);
+		if(parts != null){
+			this.parts.putAll(parts);
+		}
 	}
 	
 	/**

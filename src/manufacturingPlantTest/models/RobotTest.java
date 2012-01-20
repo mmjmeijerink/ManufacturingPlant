@@ -1,6 +1,5 @@
 package manufacturingPlantTest.models;
 
-import manufacturingPlant.models.AssemblyLine;
 import manufacturingPlant.models.Robot;
 
 import org.junit.Before;
@@ -8,12 +7,16 @@ import org.junit.Test;
 
 public class RobotTest extends junit.framework.TestCase{
 	
+	private Robot r;
+	
 	@Before
-	public void setUp() throws Exception {}
+	public void setUp() throws Exception {
+		r = new Robot(null,1);
+	}
 
 	@Test
 	public void testRobot() {
-		assertNotNull(new Robot(null,1));
+		assertNotNull(r);
 	}
 
 	@Test
@@ -27,23 +30,18 @@ public class RobotTest extends junit.framework.TestCase{
 	}
 
 	@Test
-	public void testGetProductUnderConstruction() {
-		fail("Not yet implemented");
-	}
-
-	@Test
 	public void testGetStationNumber() {
-		fail("Not yet implemented");
+		assertEquals(r.getStationNumber(), 1);
 	}
 
 	@Test
 	public void testIsFirstRobotOfTheLine() {
-		fail("Not yet implemented");
+		assertTrue(r.isFirstRobotOfTheLine());
 	}
 
 	@Test
 	public void testIsLastRobotOfTheLine() {
-		fail("Not yet implemented");
+		assertFalse(r.isLastRobotOfTheLine());
 	}
 
 }

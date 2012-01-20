@@ -53,9 +53,10 @@ public class Order {
 		this.initialProducts = products;
 		this.products = products;
 		this.customer = customer;
-		
-		for(Product product : products.keySet()) {
-			assemblies.put(product, new ArrayList<AssembledProduct>());
+		if(products != null){
+			for(Product product : products.keySet()) {
+				assemblies.put(product, new ArrayList<AssembledProduct>());
+			}
 		}
 	}
 	
@@ -99,10 +100,11 @@ public class Order {
 	public boolean isFinished() {
 		if(!finished) {
 			finished = true;
-			
-			for(Product product : products.keySet()) {
-				if(!products.get(product).equals(new Integer(0)))
-					finished = false;
+			if(products != null){
+				for(Product product : products.keySet()) {
+					if(!products.get(product).equals(new Integer(0)))
+						finished = false;
+				}
 			}
 		}
 		
