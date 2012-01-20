@@ -19,7 +19,7 @@ public class PartBin {
 	 * @directed true
 	 * @supplierCardinality *
 	 */
-	private ArrayList<Part> parts;
+	private ArrayList<Part> parts = new ArrayList<Part>();
 	
 	//private Robot robot;
 	

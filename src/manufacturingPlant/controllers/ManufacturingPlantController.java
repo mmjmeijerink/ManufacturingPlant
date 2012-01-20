@@ -48,7 +48,7 @@ public class ManufacturingPlantController implements Observer, ActionListener {
 	 */
 	public ManufacturingPlantController() {
 		view = new MainView(this);
-		view.log("Manufacturing plant started\n");
+		view.log("Manufacturing plant started");
 		
 		for(int i = 0; i < 10; i++) {
 			assemblyLines.add(new AssemblyLine());
