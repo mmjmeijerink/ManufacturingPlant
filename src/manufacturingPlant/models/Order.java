@@ -120,4 +120,13 @@ public class Order {
 		products.put(product, new Integer(products.get(product) - 1));
 		assemblies.get(product).add(assembly);
 	}
+	
+	/**
+	 * String representation of this instance
+	 * 
+	 *  @ensure result != null
+	 */
+	public String toString() {
+		return customer;
+	}
 }

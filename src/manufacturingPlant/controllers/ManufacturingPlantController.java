@@ -1,13 +1,17 @@
 package manufacturingPlant.controllers;
 
 import manufacturingPlant.models.*;
+import manufacturingPlant.views.MainView;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
-public class ManufacturingPlantController implements Observer {
+public class ManufacturingPlantController implements Observer, ActionListener {
 
 	/** ArrayList with all types of products the plant currently can produce */
 	private ArrayList<Product> productTypes = new ArrayList<Product>(); 
@@ -35,6 +39,22 @@ public class ManufacturingPlantController implements Observer {
 	/** Map with <Part, ArrayList<Part>> mappings modeling which parts there are and how many there are in stock */
 	private Map<Part, ArrayList<Part>> parts = new HashMap<Part, ArrayList<Part>>();
 
+	/** The GUI */
+	private MainView view;
+	
+	/**
+	 * Constructor
+	 * Starts the factory and makes ten AssemblyLines
+	 */
+	public ManufacturingPlantController() {
+		view = new MainView(this);
+		view.log("Manufacturing plant started\n");
+		
+		for(int i = 0; i < 10; i++) {
+			assemblyLines.add(new AssemblyLine());
+		}
+	}
+	
 	/**
 	 * Adds an Order and puts all products still in stock which can be used in the order
 	 * Then it makes new ProductRuns to match the number of product needed for this order
@@ -44,26 +64,30 @@ public class ManufacturingPlantController implements Observer {
 		orders.add(order);
 		
 		for(Product product : order.getInitialProducts().keySet()) {
-			if(products.containsKey(product)) {
+			if(this.products.containsKey(product)) {
 				for(AssembledProduct assembly : product.getAssemblies()) {
-					if(order.getProducts().get(product) != 0 && products.get(product) > 0) {
+					if(order.getProducts().get(product) != 0 && !this.products.get(product).isEmpty()) {
 						order.addAssembledProduct(assembly);
-						products.put(product, products.get(product) - 1);
+						this.products.get(product).remove(assembly);
 					}
 				}
 			}
 			
 			addProductRun(new ProductRun(product, order.getProducts().get(product), order));
 		}
+		
+		view.setOrdersList(orders);
 	}
 
 	/**
 	 * If there is an idle AssemblyLine and the queue with ProductRuns isn't empty, an new run will be started
 	 */
 	public void run() {
+		view.log("<Looking for a free assembly line>");
 		for(int i = 0; i < assemblyLines.size() && !queue.isEmpty(); i++) {
 			if(assemblyLines.get(i).isIdle()) {
 				assemblyLines.get(i).startRun(queue.get(0));
+				view.log("\nStarted new run on assembly line " + i + ".\nProduct: " + queue.get(0).getProduct() + "\nAmount: " + queue.get(0).getAmount());
 				queue.remove(queue.remove(0));
 			}
 		}
@@ -74,6 +98,10 @@ public class ManufacturingPlantController implements Observer {
 	 */
 	public void addProductRun(ProductRun run) {
 		queue.add(run);
+		
+		// Log dit in de GUI
+		view.log("\nAdded new product run to the queue.\nProduct: " + run.getProduct() + "\nAmount: " + run.getAmount());
+		
 		run();
 	}
 	
@@ -114,11 +142,37 @@ public class ManufacturingPlantController implements Observer {
 		}
 		
 		orders.remove(order);
+		view.removeOrder(order);
 	}
 
 	public void update(Observable o, Object arg) {
 		if(o instanceof AssemblyLine) {
 			run();
+		}
+	}
+
+	//Voor het toevoegen van Producten tijdens het testen
+	public void setProducts(ArrayList<Product> products) {
+		this.productTypes = products;
+		view.setProducts(products);
+	}
+
+	@Override
+	// Handelt de acties van de GUI af
+	public void actionPerformed(ActionEvent arg0) {
+		if(arg0.getActionCommand().equals(view.getAddProductButton().getActionCommand())) {
+			view.setProductsOnNewOrder(view.getNewProductValue(), view.getNewAmountValue());
+			view.log("\nAdded new product to the order.\nProduct: " + view.getNewProductValue() + "\nAmount: " + view.getNewAmountValue());
+			view.resetNewProduct();
+		} else if(arg0.getActionCommand().equals(view.getAddOrderButton().getActionCommand())) {
+			if(!view.getProductsOnNewOrder().isEmpty() && (!view.getCustomer().isEmpty() || !view.getCustomer().equals(" "))) {
+				addOrder(view.getProductsOnNewOrder(), view.getCustomer());
+				view.log("\nAdded new order.");
+				view.resetNewOrder();
+			}
+		} else if(arg0.getActionCommand().equals(view.getCancelOrderButton().getActionCommand())) {
+			view.log("\nRemoved order of " + view.getSelectedOrder() + ".");
+			cancelOrder(view.getSelectedOrder());
 		}
 	}
 }

@@ -99,4 +99,13 @@ public class Product extends Assembly {
 	public Map<Part, Integer> getPart() {
 		return parts;
 	}
+	
+	/**
+	 * String representation of this product
+	 * 
+	 * @ensure result != null
+	 */
+	public String toString() {
+		return this.getName();
+	}
 }
