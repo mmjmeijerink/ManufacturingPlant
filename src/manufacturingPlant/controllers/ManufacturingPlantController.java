@@ -51,7 +51,9 @@ public class ManufacturingPlantController implements Observer, ActionListener {
 		view.log("Manufacturing plant started");
 		
 		for(int i = 0; i < 10; i++) {
-			assemblyLines.add(new AssemblyLine());
+			AssemblyLine line = new AssemblyLine();
+			line.addObserver(this);
+			assemblyLines.add(line);
 		}
 	}
 	
@@ -87,7 +89,7 @@ public class ManufacturingPlantController implements Observer, ActionListener {
 			if(assemblyLines.get(i).isIdle()) {
 				// Log in de GUI
 				view.log("\n---------------------------------------------------------------");
-				view.log("\nStarted new run on assembly line " + i + ".\nProduct: " + queue.get(0).getProduct() + "\nAmount: " + queue.get(0).getAmount());
+				view.log("Started new run on assembly line " + i + ".\nProduct: " + queue.get(0).getProduct() + "\nAmount: " + queue.get(0).getAmount());
 				view.log("---------------------------------------------------------------");
 				
 				assemblyLines.get(i).startRun(queue.get(0));

@@ -45,6 +45,7 @@ public class Robot {
 		if(stationNumber == 1) {
 			isFirstRobotOfTheLine = true;
 		}
+		
 		if(line != null) {
 			if(line.getProductRun() != null) {
 				if(stationNumber == this.line.getProductRun().getProduct().getPart().size()) {
@@ -78,27 +79,33 @@ public class Robot {
 	 */
 	public void doStep() {
 		if(isFirstRobotOfTheLine) {
-			if(line.getProductRun().getAmount() < line.getAmountMade()) {
+			if(line.getProductsUnderConstruction().size() < line.getProductRun().getAmount()) {
 				line.addNewProductUnderConstruction(new AssembledProduct(line.getProductRun().getProduct()));
+				// Monteer eerste parts
+				getCurrentProductUnderConstruction().assembleParts(bin.getParts());
 			}
 		} else if(isLastRobotOfTheLine) {
+			// Monteer laatste parts
+			getCurrentProductUnderConstruction().assembleParts(bin.getParts());
+			
+			// Geef serialNumber, product is af
 			int serialNumber = makeSerialNumber();
-			getCurrentProductUnderConstruction().setSerialNumber(serialNumber);
 			line.getProductRun().getOrder().addAssembledProduct(getCurrentProductUnderConstruction());
+			getCurrentProductUnderConstruction().setSerialNumber(serialNumber);
 			line.deliverFinishedProduct();
 		} else {
-			//monteer
+			// Monteer
 			getCurrentProductUnderConstruction().assembleParts(bin.getParts());
 		}
 	}
 	
 	private int makeSerialNumber() {
-		String res = "1";
+		int res = 1;
 		for(int i = 0; i < 15; i++){
 			int k = (int)(Math.random() * 10.0);
-			res += Integer.toString(k);
+			res += k;
 		}
-		return Integer.parseInt(res);
+		return res;
 	}
 
 	//De JUnit 'RobotTest' heeft deze methode nodig
@@ -120,7 +127,6 @@ public class Robot {
 	 * De methode getProductUnderConstruction() geeft het 
 	 * AssembledProduct terug waaraan door deze Robot wordt
 	 * gewerkt
-	 * @return this.productUnderConstruction
 	 */
 	public AssembledProduct getProductUnderConstruction() {
 		return getCurrentProductUnderConstruction();

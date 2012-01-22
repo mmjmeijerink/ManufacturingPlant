@@ -109,13 +109,22 @@ public class AssemblyLine extends Observable {
 	
 	/**
 	 * De methode nextStep() zorgt ervoor dat een AssembledProduct
-	 * van de ProductRun een plaatsje opschuift op de assemblagelijn
-	 * Er wordt tevens gekeken of de ProductRun voltooid is.
+	 * van de ProductRun een plaatsje opschuift op de assemblagelijn,
+	 * nadat de voorgaande stap gedaan is
 	 */
 	public void nextStep() {
-		for(int i = 0; i < robots.size(); i++) {
-			if(robots.get(i).getProductUnderConstruction() != null && !robots.get(i).isLastRobotOfTheLine())
+		for(int i = robots.size() - 1; i >= 0; i--) {
+			if(robots.get(i).isFirstRobotOfTheLine()) {
+				robots.get(i).doStep();
+				if(robots.get(i).getProductUnderConstruction() != null) {
+					robots.get(i).getProductUnderConstruction().moveStation();
+				}
+			} else if(robots.get(i).getProductUnderConstruction() != null && !robots.get(i).isLastRobotOfTheLine()) {
+				robots.get(i).doStep();
 				robots.get(i).getProductUnderConstruction().moveStation();
+			} else if(robots.get(i).getProductUnderConstruction() != null && robots.get(i).isLastRobotOfTheLine()) {
+				robots.get(i).doStep();
+			}
 		}
 	}
 
