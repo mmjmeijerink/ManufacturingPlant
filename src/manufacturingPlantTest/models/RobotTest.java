@@ -21,20 +21,15 @@ public class RobotTest extends junit.framework.TestCase{
 	}
 
 	@Test
-	public void testDoStep() {
-		fail("Still to be implemented");
-	}
-
-	@Test
 	public void testSetPartBin() {
 		PartBin bin = new PartBin(null);
 		r.setPartBin(bin);
-		assertEquals(r.getPartBin(),bin);
+		assertEquals(bin, r.getPartBin());
 	}
 
 	@Test
 	public void testGetStationNumber() {
-		assertEquals(r.getStationNumber(), 1);
+		assertEquals(1, r.getStationNumber());
 	}
 
 	@Test

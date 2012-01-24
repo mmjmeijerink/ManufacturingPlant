@@ -20,14 +20,14 @@ public class AssemblyTest extends junit.framework.TestCase{
 	@Test
 	public void testAssembly() {
 		as = new BoughtPart("test");
-		assertEquals("BoughtPart aangemaakt: ", as != null, as != null);
+		assertNotNull(as);
 		as = new MadePart("test");
-		assertEquals("MadePart aangemaakt: ", as != null, as != null);
+		assertNotNull(as);
 	}
 
 	@Test
 	public void testGetName() {
-		assertEquals("Naam word goed opgehaald: ", as1.getName(), "test");
+		assertEquals("Naam word goed opgehaald: ", "test", as1.getName() );
 	}
 
 }

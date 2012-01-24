@@ -32,7 +32,7 @@ public class PartBinTest extends junit.framework.TestCase{
 	public void testGetParts() {
 		bin = new PartBin(parts);
 		assertNotNull(bin.getParts());
-		assertEquals("Parts zijn hetzelfde: ",bin.getParts(),parts);
+		assertEquals("Parts zijn hetzelfde: ", parts, bin.getParts());
 		assertTrue(bin.getParts().containsAll(parts));
 	}
 
