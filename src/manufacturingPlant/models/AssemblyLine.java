@@ -154,12 +154,12 @@ public class AssemblyLine extends Observable {
 				
 				robot.setPartBin(new PartBin(partsForBin));
 			}
+			
+			while(amountMade != run.getAmount()) {
+				nextStep();
+			}
+			finishRun();
 		}
-		
-		while(amountMade != run.getAmount()) {
-			nextStep();
-		}
-		finishRun();
 	}
 
 	@Override

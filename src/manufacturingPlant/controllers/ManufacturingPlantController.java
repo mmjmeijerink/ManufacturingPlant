@@ -93,7 +93,9 @@ public class ManufacturingPlantController implements Observer, ActionListener {
 				view.log("---------------------------------------------------------------");
 				
 				assemblyLines.get(i).startRun(queue.get(0));
+				
 				queue.remove(queue.remove(0));
+				
 			}
 		}
 	}
