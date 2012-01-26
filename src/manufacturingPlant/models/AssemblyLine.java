@@ -158,8 +158,9 @@ public class AssemblyLine extends Observable {
 			while(amountMade != run.getAmount()) {
 				nextStep();
 			}
-			finishRun();
 		}
+		
+		finishRun();
 	}
 
 	@Override
