@@ -100,12 +100,13 @@ public class Robot {
 	}
 	
 	private int makeSerialNumber() {
-		int res = 1;
-		for(int i = 0; i < 15; i++){
+		String res = Integer.toString(1);
+		for(int i = 0; i < 7; i++){
 			int k = (int)(Math.random() * 10.0);
-			res += k;
+			res += Integer.toString(k);
 		}
-		return res;
+		//System.out.println(Integer.parseInt(res));
+		return Integer.parseInt(res);
 	}
 
 	//De JUnit 'RobotTest' heeft deze methode nodig
