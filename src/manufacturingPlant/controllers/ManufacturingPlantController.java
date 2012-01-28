@@ -185,17 +185,21 @@ public class ManufacturingPlantController implements Observer, ActionListener {
 				view.log("Use an appropiate number of products to add to the order!");
 				view.log("---------------------------------------------------------------");
 			}
-			
 			view.resetNewProduct();
 		} else if(arg0.getActionCommand().equals(view.getAddOrderButton().getActionCommand())) {
-			if(!view.getProductsOnNewOrder().isEmpty() && (!view.getCustomer().isEmpty() || !view.getCustomer().equals(" "))) {
-				// Log in de GUI
-				view.log("\n---------------------------------------------------------------");
-				view.log("Added new order.");
-				view.log("---------------------------------------------------------------");
-				
-				addOrder(view.getProductsOnNewOrder(), view.getCustomer());
-				view.resetNewOrder();
+			if(!view.getProductsOnNewOrder().isEmpty()) {
+				if(view.getCustomer().isEmpty() || view.getCustomer().equals(" ")){
+					view.log("\n---------------------------------------------------------------");
+					view.log("Fill in a customer name for the order!");
+					view.log("---------------------------------------------------------------");
+				} else {
+					// Log in de GUI
+					view.log("\n---------------------------------------------------------------");
+					view.log("Added new order.");
+					view.log("---------------------------------------------------------------");
+					addOrder(view.getProductsOnNewOrder(), view.getCustomer());
+					view.resetNewOrder();
+				}
 			}
 		} else if(arg0.getActionCommand().equals(view.getCancelOrderButton().getActionCommand())) {
 			// Log in de GUI
