@@ -74,7 +74,6 @@ public class ManufacturingPlantController implements Observer, ActionListener {
 					}
 				}
 			}
-			
 			addProductRun(new ProductRun(product, order.getProducts().get(product), order));
 		}
 		
@@ -175,11 +174,17 @@ public class ManufacturingPlantController implements Observer, ActionListener {
 	// Handelt de acties van de GUI af
 	public void actionPerformed(ActionEvent arg0) {
 		if(arg0.getActionCommand().equals(view.getAddProductButton().getActionCommand())) {
-			view.setProductsOnNewOrder(view.getNewProductValue(), view.getNewAmountValue());
-			// Log in de GUI
-			view.log("\n---------------------------------------------------------------");
-			view.log("Added new product to the order.\nProduct: " + view.getNewProductValue() + "\nAmount: " + view.getNewAmountValue());
-			view.log("---------------------------------------------------------------");
+			if(view.getNewAmountValue() > 0){
+				view.setProductsOnNewOrder(view.getNewProductValue(), view.getNewAmountValue());
+				// Log in de GUI
+				view.log("\n---------------------------------------------------------------");
+				view.log("Added new product to the order.\nProduct: " + view.getNewProductValue() + "\nAmount: " + view.getNewAmountValue());
+				view.log("---------------------------------------------------------------");
+			} else {
+				view.log("\n---------------------------------------------------------------");
+				view.log("Use an appropiate number of products to add to the order!");
+				view.log("---------------------------------------------------------------");
+			}
 			
 			view.resetNewProduct();
 		} else if(arg0.getActionCommand().equals(view.getAddOrderButton().getActionCommand())) {
