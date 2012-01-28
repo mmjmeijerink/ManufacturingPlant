@@ -5,13 +5,15 @@ import manufacturingPlant.views.MainView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
-public class ManufacturingPlantController implements Observer, ActionListener {
+public class ManufacturingPlantController extends MouseAdapter implements Observer, ActionListener {
 
 	/** ArrayList with all types of products the plant currently can produce */
 	private ArrayList<Product> productTypes = new ArrayList<Product>(); 
@@ -173,6 +175,8 @@ public class ManufacturingPlantController implements Observer, ActionListener {
 	@Override
 	// Handelt de acties van de GUI af
 	public void actionPerformed(ActionEvent arg0) {
+		//System.out.println(arg0.getActionCommand());
+		
 		if(arg0.getActionCommand().equals(view.getAddProductButton().getActionCommand())) {
 			if(view.getNewAmountValue() > 0){
 				view.setProductsOnNewOrder(view.getNewProductValue(), view.getNewAmountValue());
@@ -207,6 +211,27 @@ public class ManufacturingPlantController implements Observer, ActionListener {
 			view.log("Removed order of " + view.getSelectedOrder() + ".");
 			view.log("---------------------------------------------------------------");
 			cancelOrder(view.getSelectedOrder());
+		} 
+	}
+	
+	@Override
+	public void mouseClicked(MouseEvent evt){
+		//System.out.println("MouseEvent op list waargenomen!");
+		javax.swing.JList list = (javax.swing.JList)evt.getSource();
+		int index = -1;
+		if(evt.getClickCount() == 2){
+			index = list.locationToIndex(evt.getPoint());
+		} else if (evt.getClickCount() == 3){
+			index = list.locationToIndex(evt.getPoint());
+		}
+		if(index != -1){
+			//System.out.println(Integer.toString(index));
+			Order o = (Order)orders.get(index);
+			//Iets doen met de order die aangeklikt wordt
+			view.log("\n---------------------------------------------------------------");
+			view.log("Specification of selected order:\n");
+			view.log(o.orderToString());
+			view.log("---------------------------------------------------------------");
 		}
 	}
 }

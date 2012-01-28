@@ -131,4 +131,17 @@ public class Order {
 	public String toString() {
 		return customer;
 	}
+	
+	public String orderToString(){
+		String result = "Customer: ";
+		result += customer;
+		result += "\n\nProducts:\n";
+		for(Product prod : assemblies.keySet()){
+			result += prod.getName() + " x " + assemblies.get(prod).size() + "\n";
+			for(int i = 0; i < assemblies.get(prod).size(); i++){
+				result += "# " + assemblies.get(prod).get(i).getSerialNumber() + "\n";
+			}
+		}
+		return result;
+	}
 }

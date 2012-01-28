@@ -1,6 +1,7 @@
 package manufacturingPlant.views;
 
 import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -58,7 +59,11 @@ public class MainView extends JFrame {
         addOrderButton = new javax.swing.JButton();
         ordersOverviewPanel = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
+        
         ordersList = new javax.swing.JList();
+        //MouseListener toegevoegd om mouse events op lijst waar te nemen
+        ordersList.addMouseListener((MouseListener) controller);
+        
         cancelOrderButton = new javax.swing.JButton();
 
         mainPanel.setName("mainPanel"); // NOI18N
@@ -253,7 +258,6 @@ public class MainView extends JFrame {
     private javax.swing.JComboBox productList;
     private javax.swing.JLabel productToAdd;
     private javax.swing.JButton cancelOrderButton;
-
     private ArrayList<Product> products = new ArrayList<Product>();
     private ArrayList<Order> orders = new ArrayList<Order>();
     private Map<Product, Integer> productsOnNewOrder = new HashMap<Product, Integer>();
@@ -354,4 +358,5 @@ public class MainView extends JFrame {
     	logArea.append(msg + "\n");
     	logArea.setCaretPosition(logArea.getText().length());
     }
+    
 }
